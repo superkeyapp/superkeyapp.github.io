@@ -15,15 +15,28 @@ export default defineConfig({
     // 右上角导航
     nav: [
       { text: '文档', link: '/guide/start', activeMatch: '/guide/' },
+      { text: '下载', link: '/download' },
       { text: '问题反馈', link: 'https://github.com/superkeyapp/superkeyapp.github.io/issues' },
     ],
 
     // 文档页左侧目录
     sidebar: {
+      '/download': [
+        {
+          text: '开始',
+          items: [
+            { text: '安装与开始使用', link: '/guide/start' },
+            { text: '下载', link: '/download' },
+          ],
+        },
+      ],
       '/guide/': [
         {
           text: '开始',
-          items: [{ text: '安装与开始使用', link: '/guide/start' }],
+          items: [
+            { text: '安装与开始使用', link: '/guide/start' },
+            { text: '下载', link: '/download' },
+          ],
         },
       ],
     },
