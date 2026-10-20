@@ -1,36 +1,67 @@
 <script setup lang="ts">
-// 首页：标题区 → 功能演示（一段文字一张图，左右交替）→ 选择版本（三张卡片 + 详细对比）→ 底部下载
+// 首页：优势（免费、离线……，最先看到）→ 软件名和下载 → 功能演示（一句话 + 例子 + 一张图，左右交替）
+//       → 选择版本（三张卡片 + 详细对比）→ 底部下载
 // 内容都在 home.ts；这里只管排版。颜色用 VitePress 的主题变量，深色、浅色都适配
 import { withBase } from 'vitepress'
-import { hero, features, editionsIntro, editions, compareTitle, compareRows, type Media } from './home'
+import { advantages, hero, features, editionsIntro, editions, compareTitle, compareRows, type Media } from './home'
 
 const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
+
+// 优势的图标：24×24 的线条图（颜色跟着文字）
+const icons: Record<string, string[]> = {
+  free: ['M3 8h18v4H3z', 'M5 12v8h14v-8', 'M12 8v12', 'M12 8C10.5 4.5 6.5 4.5 7.5 7.2 8.2 8 12 8 12 8', 'M12 8c1.5-3.5 5.5-3.5 4.5-.8C15.8 8 12 8 12 8'],
+  offline: ['M2 8.8a15 15 0 0 1 20 0', 'M5.3 12.3a10 10 0 0 1 13.4 0', 'M8.7 15.7a5 5 0 0 1 6.6 0', 'M12 19.5h.01', 'M3 3l18 18'],
+  small: ['M21 8l-9-5-9 5 9 5z', 'M3 8v8l9 5 9-5V8', 'M12 13v8'],
+  editions: ['M12 3l9 5-9 5-9-5z', 'M3 12.5l9 5 9-5', 'M3 16.5l9 5 9-5'],
+}
 </script>
 
 <template>
   <div class="home">
-    <!-- 标题区 -->
+    <!-- 标题区：先看到优势，再看到软件名 -->
     <section class="hero">
-      <img class="hero-logo" :src="withBase('/logo.svg')" alt="" />
-      <h1 class="hero-name">{{ hero.name }}</h1>
+      <ul class="advantages">
+        <li v-for="a in advantages" :key="a.title">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path v-for="d in icons[a.icon]" :key="d" :d="d" />
+          </svg>
+          <div>
+            <strong>{{ a.title }}</strong>
+            <span>{{ a.text }}</span>
+          </div>
+        </li>
+      </ul>
+      <div class="hero-brand">
+        <img class="hero-logo" :src="withBase('/logo.svg')" alt="" />
+        <h1 class="hero-name">{{ hero.name }}</h1>
+      </div>
       <p class="hero-title">{{ hero.title }}</p>
       <p class="hero-tagline">{{ hero.tagline }}</p>
+      <ul class="hero-ways">
+        <li v-for="w in hero.ways" :key="w">{{ w }}</li>
+      </ul>
       <div class="hero-actions">
-        <a class="btn btn-brand" :href="withBase(hero.primary.link)">{{ hero.primary.text }}</a>
-        <a class="btn btn-alt" :href="hero.secondary.link">{{ hero.secondary.text }} ↓</a>
+        <a class="btn btn-brand btn-lg" :href="withBase(hero.primary.link)">{{ hero.primary.text }}</a>
+        <p class="hero-note">{{ hero.note }}</p>
+        <a class="btn btn-alt btn-sm" :href="hero.secondary.link">{{ hero.secondary.text }} ↓</a>
       </div>
-      <p class="hero-note">{{ hero.note }}</p>
     </section>
 
-    <!-- 功能演示：一段文字一张图，左右交替 -->
+    <!-- 功能演示：一句话 + 一个例子 + 一张图，左右交替 -->
     <section class="features">
       <div v-for="(f, i) in features" :id="f.id" :key="f.id" class="feature" :class="{ reverse: i % 2 === 1 }">
         <div class="feature-text">
+          <p class="feature-name">{{ f.name }}</p>
           <h2>{{ f.title }}</h2>
-          <template v-for="(p, j) in f.content" :key="j">
-            <p v-if="typeof p === 'string'">{{ p }}</p>
-            <p v-else class="strong">{{ p.text }}</p>
-          </template>
+          <p>{{ f.text }}</p>
+          <ul class="examples">
+            <li v-for="(line, i) in f.examples" :key="i" :class="{ note: line.every(p => typeof p === 'string') }">
+              <template v-for="(part, j) in line" :key="j">
+                <kbd v-if="typeof part !== 'string'">{{ part.key }}</kbd>
+                <template v-else>{{ part }}</template>
+              </template>
+            </li>
+          </ul>
         </div>
         <div class="feature-media">
           <video v-if="isVideo(f.media)" :src="withBase(f.media.src!)" :poster="f.media.poster && withBase(f.media.poster)"
@@ -89,7 +120,7 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
 
     <!-- 底部再给一次下载 -->
     <section class="bottom">
-      <h2>{{ hero.title }}</h2>
+      <h2>{{ hero.bottom }}</h2>
       <a class="btn btn-brand" :href="withBase(hero.primary.link)">{{ hero.primary.text }}</a>
     </section>
   </div>
@@ -121,44 +152,108 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
 /* ---- 标题区 ---- */
 .hero {
   text-align: center;
-  padding: 72px 0 56px;
+  padding: 40px 0 56px;
+}
+/* 优势：一排四块，最先看到 */
+.advantages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 880px;
+  margin: 0 auto 48px;
+  padding: 0;
+  list-style: none;
+}
+.advantages li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--vp-c-brand-soft);
+  text-align: left;
+}
+.advantages svg {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--vp-c-brand-1);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.advantages strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--vp-c-text-1);
+}
+.advantages span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--vp-c-text-2);
+}
+.hero-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 .hero-logo {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 20px;
+  width: 64px;
+  height: 64px;
 }
 .hero-name {
-  font-size: 56px;
+  font-size: 52px;
   line-height: 1.15;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(120deg, var(--vp-c-brand-1), #8b5cf6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.hero-title {
-  margin-top: 12px;
-  font-size: 32px;
-  line-height: 1.3;
-  font-weight: 600;
   color: var(--vp-c-text-1);
 }
-.hero-tagline {
-  margin-top: 16px;
-  font-size: 18px;
+.hero-title {
+  margin-top: 14px;
+  font-size: 24px;
+  line-height: 1.4;
   color: var(--vp-c-text-2);
 }
-.hero-actions {
+.hero-tagline {
+  margin-top: 6px;
+  font-size: 16px;
+  color: var(--vp-c-text-2);
+}
+/* 能用的操作方式：一排小标签 */
+.hero-ways {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-ways li {
+  margin: 0;
+  padding: 2px 12px;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--vp-c-text-2);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+}
+/* 主按钮（推荐版本）单独一行、大一号；其他版本在下面、小一号 */
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
   margin-top: 32px;
 }
+/* 主按钮下面的小字：下的是哪个版本、多大 */
 .hero-note {
-  margin-top: 20px;
+  margin: -4px 0 8px;
   font-size: 14px;
   color: var(--vp-c-text-3);
 }
@@ -181,6 +276,23 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
 }
 .btn-brand:hover {
   background: var(--vp-c-brand-2);
+}
+.btn-lg {
+  min-width: 260px;
+  padding: 0 48px;
+  line-height: 60px;
+  border-radius: 30px;
+  font-size: 21px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(26, 115, 232, 0.28);
+}
+.btn-sm {
+  padding: 0 18px;
+  line-height: 36px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .btn-alt {
   background: var(--vp-c-default-soft);
@@ -209,22 +321,59 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
 .feature.reverse .feature-text {
   order: 2;
 }
+.feature-text .feature-name {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
 .feature-text h2 {
-  font-size: 28px;
-  line-height: 1.35;
+  font-size: 30px;
+  line-height: 1.3;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   color: var(--vp-c-text-1);
 }
 .feature-text p {
   font-size: 16px;
-  line-height: 1.8;
+  line-height: 1.7;
   color: var(--vp-c-text-2);
-  margin: 8px 0;
+  margin: 0;
 }
-.feature-text p.strong {
+/* 例子：按键画成键帽 */
+.feature-text .examples {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
   color: var(--vp-c-text-1);
-  font-weight: 600;
+  line-height: 2.2;
+}
+.feature-text .examples li {
+  margin: 0;
+}
+/* 只有文字、没有按键的一行（如“还可以自己添加更多”）：灰色小字 */
+.feature-text .examples li.note {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+/* 一行一个缩写时，键帽一样宽，后面的箭头对齐 */
+.feature-text .examples li > kbd:first-child {
+  min-width: 44px;
+}
+kbd {
+  display: inline-block;
+  min-width: 24px;
+  padding: 0 8px;
+  margin: 0 2px;
+  line-height: 24px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  text-align: center;
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-bottom-width: 2px;
+  border-radius: 6px;
 }
 .feature-media img,
 .feature-media video,
@@ -391,17 +540,51 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
   }
 }
 @media (max-width: 768px) {
+  /* 对比表：字和边距收小，手机上不用左右滑 */
+  .compare table {
+    font-size: 12px;
+  }
+  .compare th,
+  .compare td {
+    padding: 8px 5px;
+  }
+  /* 外面 VitePress 已留了 24px 边距，手机上不再加 */
+  .home {
+    padding: 0 0 48px;
+  }
   .hero {
-    padding: 48px 0 32px;
+    padding: 24px 0 32px;
+  }
+  .advantages {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  /* 手机上一块只有一百多像素宽：图标、边距收小，小字才能一行放下 */
+  .advantages li {
+    gap: 8px;
+    padding: 10px 10px;
+  }
+  .advantages svg {
+    width: 22px;
+    height: 22px;
+  }
+  .advantages strong {
+    font-size: 16px;
+  }
+  .advantages span {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .hero-logo {
+    width: 48px;
+    height: 48px;
   }
   .hero-name {
-    font-size: 40px;
+    font-size: 36px;
   }
   .hero-title {
-    font-size: 24px;
-  }
-  .hero-tagline {
-    font-size: 16px;
+    font-size: 18px;
   }
   .features {
     gap: 64px;
@@ -415,7 +598,7 @@ const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
     order: 0;
   }
   .feature-text h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
 }
 </style>
