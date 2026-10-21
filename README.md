@@ -91,3 +91,7 @@ npm run preview   # 在本地打开打包后的结果，确认一遍
 ## 问题反馈
 
 使用中遇到问题或有建议，欢迎在 [Issues](https://github.com/superkeyapp/superkeyapp.github.io/issues) 里告诉我们。
+
+## 声明
+
+仅供学习和交流使用，请勿用于任何非法用途。
