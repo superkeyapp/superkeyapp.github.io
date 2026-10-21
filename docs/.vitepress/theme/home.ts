@@ -17,11 +17,17 @@ export interface Feature {
   title: string           // 一句话说它能做什么
   text: string            // 补充一句
   examples: ExamplePart[][]  // 具体例子，一行一个
+  status?: FeatureStatus  // 默认开没开、在哪打开：看完这一块就能用，不用再去翻文档
   media: Media
 }
 
+export interface FeatureStatus {
+  on: boolean   // 装好就能用（true），还是要在设置里打开（false）
+  text: string  // 补充：在哪里生效，或在哪里打开
+}
+
 export interface Advantage {
-  icon: 'free' | 'offline' | 'small' | 'editions'   // 图标（HomePage.vue 里画）
+  icon: 'free' | 'offline' | 'small' | 'editions' | 'ready' | 'light'   // 图标（HomePage.vue 里画）
   title: string
   text: string
 }
@@ -49,9 +55,23 @@ const downloadPage = '/download'
 export const advantages: Advantage[] = [
   { icon: 'free', title: '免费使用', text: '无广告，不用注册' },
   { icon: 'offline', title: '完全离线', text: '不联网，不上传' },
-  { icon: 'small', title: '小巧轻快', text: '最小 3 MB' },
-  { icon: 'editions', title: '三种版本', text: '功能一样，任选' },
+  { icon: 'ready', title: '开箱即用', text: '装好就能用' },
+  { icon: 'light', title: '运行轻快', text: '后台占用很少' },
+  // 发布其他版本后换回这两条：
+  // { icon: 'small', title: '小巧轻快', text: '最小 3 MB' },
+  // { icon: 'editions', title: '三种版本', text: '功能一样，任选' },
 ]
+
+/** 首屏的界面截图：上面一排标签，点哪个换哪张（图在 docs/public/screens/，16:10） */
+export const screens = [
+  { id: 'overview', label: '概览', src: '/screens/overview.webp', alt: '概览：运行状态、常用开关、我的快捷方式' },
+  { id: 'hotkey', label: '快捷键', src: '/screens/hotkey.webp', alt: '快捷键列表：每一条一张卡片，可以单独开关' },
+  { id: 'edit', label: '编辑', src: '/screens/hotkey-edit.webp', alt: '编辑：录入组合键，按顺序添加几个动作' },
+  { id: 'gesture', label: '鼠标手势', src: '/screens/gesture.webp', alt: '鼠标手势：选项和自带的手势' },
+]
+
+/** 先只发布 WinUI 版：其他版本（Win32、Tauri）的按钮和“选择版本”一块先不显示；以后发布时改成 true */
+export const showOtherEditions = false
 
 export const hero = {
   name: '超级快捷键',
@@ -62,7 +82,8 @@ export const hero = {
   bottom: '常用操作，一步完成',
   primary: { text: '免费下载', link: downloadPage },
   secondary: { text: '其他版本 · 最小 3 MB', link: '#editions' },
-  note: 'WinUI 版 · 63 MB · Windows 10 / 11',
+  note: '63 MB · Windows 10 / 11',
+  comingSoon: '更小的版本（约 3 MB）敬请期待',   // 只发一个版本时，代替“其他版本”按钮
 }
 
 export const features: Feature[] = [
@@ -79,19 +100,51 @@ export const features: Feature[] = [
       [{ key: 'Ctrl+Alt+Shift+P' }, ' → 暂停 / 恢复全部功能（自带）'],
       ['前两个是例子，在设置里一分钟就能加好'],
     ],
-    media: { alt: '快捷键演示' },
+    media: { src: '/home/hotkey.mp4', poster: '/home/hotkey.jpg', alt: '快捷键演示' },
   },
   {
     id: 'gesture',
-    name: '鼠标手势',
+    name: '鼠标手势 · 浏览器和所有软件',
     title: '按住右键，划一下',
-    text: '后退、关标签页、最小化，不用找按钮。装好就能用。',
+    text: '后退、刷新、关标签页，不用找按钮。',
     examples: [
-      ['右键划 ', { key: '←' }, ' → 后退'],
+      ['右键划 ', { key: '←' }, ' 后退 / ', { key: '→' }, ' 前进'],
+      ['右键划 ', { key: '↑↓' }, ' → 刷新网页'],
       ['右键划 ', { key: '↓→' }, ' → 关闭标签页'],
+      ['右键划 ', { key: '←↑' }, ' → 恢复刚关的标签页'],
       ['右键划 ', { key: '↓←' }, ' → 最小化窗口'],
+      ['还有回到顶部、切换标签页等，都能自己改'],
     ],
-    media: { alt: '鼠标手势演示' },
+    status: { on: true, text: '在所有软件里都能用' },
+    media: { src: '/home/gesture.mp4', poster: '/home/gesture.jpg', alt: '鼠标手势演示：浏览器' },
+  },
+  {
+    id: 'gestureMedia',
+    name: '鼠标手势 · 音乐和视频',
+    title: '听歌时，划一下就切歌',
+    text: '在播放器里，同样的手势自动换成播放控制。',
+    examples: [
+      ['右键划 ', { key: '←' }, ' 上一首 / ', { key: '→' }, ' 下一首'],
+      ['右键划 ', { key: '↑' }, ' 音量加 / ', { key: '↓' }, ' 音量减'],
+      ['右键划 ', { key: '↓↑' }, ' → 播放 / 暂停'],
+      ['网易云音乐、QQ 音乐、酷狗、酷我、汽水音乐，PotPlayer、QQ 影音、迅雷影音、VLC 等'],
+    ],
+    status: { on: true, text: '只在播放器里生效，其他软件照常' },
+    media: { alt: '鼠标手势演示：音乐播放器' },
+  },
+  {
+    id: 'mediaGlobal',
+    name: '后台媒体控制',
+    title: '不切窗口，控制后台的音乐',
+    text: '一边工作一边听歌，在任何软件里都能切歌、调音量。',
+    examples: [
+      ['按住右键 + ', { key: '滚轮' }, ' → 调音量'],
+      ['按住右键 + ', { key: '按滚轮' }, ' → 播放 / 暂停'],
+      ['按住右键 + ', { key: '侧键' }, ' → 上一首 / 下一首'],
+      ['按住 ', { key: 'Ctrl' }, ' 划 ', { key: '←' }, ' ', { key: '→' }, ' ', { key: '↓↑' }, ' → 切歌、暂停'],
+    ],
+    status: { on: false, text: '在设置的“程序与方案”里，打开“后台媒体控制”' },
+    media: { alt: '后台媒体控制演示' },
   },
   {
     id: 'edge',

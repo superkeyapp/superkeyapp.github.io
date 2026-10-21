@@ -2,8 +2,11 @@
 // 首页：优势（免费、离线……，最先看到）→ 软件名和下载 → 功能演示（一句话 + 例子 + 一张图，左右交替）
 //       → 选择版本（三张卡片 + 详细对比）→ 底部下载
 // 内容都在 home.ts；这里只管排版。颜色用 VitePress 的主题变量，深色、浅色都适配
+import { ref } from 'vue'
 import { withBase } from 'vitepress'
-import { advantages, hero, features, editionsIntro, editions, compareTitle, compareRows, type Media } from './home'
+import { advantages, hero, screens, features, showOtherEditions, editionsIntro, editions, compareTitle, compareRows, type Media } from './home'
+
+const shown = ref(0)   // 首屏截图：当前显示第几张
 
 const isVideo = (m: Media) => !!m.src && /\.(mp4|webm)$/i.test(m.src)
 
@@ -13,6 +16,8 @@ const icons: Record<string, string[]> = {
   offline: ['M2 8.8a15 15 0 0 1 20 0', 'M5.3 12.3a10 10 0 0 1 13.4 0', 'M8.7 15.7a5 5 0 0 1 6.6 0', 'M12 19.5h.01', 'M3 3l18 18'],
   small: ['M21 8l-9-5-9 5 9 5z', 'M3 8v8l9 5 9-5V8', 'M12 13v8'],
   editions: ['M12 3l9 5-9 5-9-5z', 'M3 12.5l9 5 9-5', 'M3 16.5l9 5 9-5'],
+  ready: ['M20 6L9 17l-5-5'],
+  light: ['M13 2L4 14h7l-1 8 9-12h-7z'],
 }
 </script>
 
@@ -43,7 +48,21 @@ const icons: Record<string, string[]> = {
       <div class="hero-actions">
         <a class="btn btn-brand btn-lg" :href="withBase(hero.primary.link)">{{ hero.primary.text }}</a>
         <p class="hero-note">{{ hero.note }}</p>
-        <a class="btn btn-alt btn-sm" :href="hero.secondary.link">{{ hero.secondary.text }} ↓</a>
+        <a v-if="showOtherEditions" class="btn btn-alt btn-sm" :href="hero.secondary.link">{{ hero.secondary.text }} ↓</a>
+        <span v-else class="coming-soon">{{ hero.comingSoon }}</span>
+      </div>
+
+      <!-- 界面截图：一打开就能看到软件长什么样；标签切换几张 -->
+      <div class="screens-hero">
+        <div class="screen-tabs" role="tablist">
+          <button v-for="(s, i) in screens" :key="s.id" role="tab" :aria-selected="shown === i"
+                  :class="{ active: shown === i }" @click="shown = i">{{ s.label }}</button>
+        </div>
+        <div class="screen-frame">
+          <img v-for="(s, i) in screens" v-show="shown === i" :key="s.id" :src="withBase(s.src)" :alt="s.alt"
+               data-zoomable :loading="i === 0 ? 'eager' : 'lazy'" />
+        </div>
+        <p class="screen-caption">{{ screens[shown].alt }}</p>
       </div>
     </section>
 
@@ -62,6 +81,11 @@ const icons: Record<string, string[]> = {
               </template>
             </li>
           </ul>
+          <p v-if="f.status" class="feature-status" :class="{ off: !f.status.on }">
+            <span class="dot" aria-hidden="true" />
+            <strong>{{ f.status.on ? '装好就能用' : '默认关闭' }}</strong>
+            <span>{{ f.status.text }}</span>
+          </p>
         </div>
         <div class="feature-media">
           <video v-if="isVideo(f.media)" :src="withBase(f.media.src!)" :poster="f.media.poster && withBase(f.media.poster)"
@@ -76,7 +100,7 @@ const icons: Record<string, string[]> = {
     </section>
 
     <!-- 选择版本 -->
-    <section id="editions" class="editions">
+    <section v-if="showOtherEditions" id="editions" class="editions">
       <h2>{{ editionsIntro.title }}</h2>
       <p class="editions-text">{{ editionsIntro.text }}</p>
       <div class="edition-cards">
@@ -244,6 +268,47 @@ const icons: Record<string, string[]> = {
   border-radius: 14px;
 }
 /* 主按钮（推荐版本）单独一行、大一号；其他版本在下面、小一号 */
+/* 首屏截图 */
+.screens-hero {
+  max-width: 960px;
+  margin: 48px auto 0;
+}
+.screen-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 16px;
+  border-radius: 20px;
+  background: var(--vp-c-default-soft);
+}
+.screen-tabs button {
+  padding: 0 16px;
+  line-height: 32px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  transition: background-color 0.2s, color 0.2s;
+}
+.screen-tabs button.active {
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.screen-frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12);
+  cursor: zoom-in;
+}
+.screen-caption {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
 .hero-actions {
   display: flex;
   flex-direction: column;
@@ -293,6 +358,17 @@ const icons: Record<string, string[]> = {
   border-radius: 18px;
   font-size: 14px;
   font-weight: 500;
+}
+/* 还没发布的版本：小标签，不能点 */
+.coming-soon {
+  margin-top: 4px;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
 }
 .btn-alt {
   background: var(--vp-c-default-soft);
@@ -359,6 +435,32 @@ const icons: Record<string, string[]> = {
 /* 一行一个缩写时，键帽一样宽，后面的箭头对齐 */
 .feature-text .examples li > kbd:first-child {
   min-width: 44px;
+}
+/* 默认开没开、在哪打开：绿点 = 装好就能用，灰点 = 要在设置里打开 */
+.feature-text .feature-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 16px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+.feature-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vp-c-green-1);
+}
+.feature-status.off .dot {
+  background: var(--vp-c-text-3);
+}
+.feature-status strong {
+  color: var(--vp-c-text-1);
+  font-weight: 600;
 }
 kbd {
   display: inline-block;
