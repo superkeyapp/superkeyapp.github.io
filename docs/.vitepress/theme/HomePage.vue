@@ -341,6 +341,7 @@ const icons: Record<string, string[]> = {
 }
 .btn-brand:hover {
   background: var(--vp-c-brand-2);
+  color: var(--vp-c-white); /* 主题里链接悬停会变成品牌蓝，和按钮底色一样：文字固定不变 */
 }
 .btn-lg {
   min-width: 260px;
@@ -376,6 +377,7 @@ const icons: Record<string, string[]> = {
 }
 .btn-alt:hover {
   background: var(--vp-c-default-2);
+  color: var(--vp-c-text-1);
 }
 
 /* ---- 功能演示 ---- */

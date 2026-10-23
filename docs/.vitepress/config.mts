@@ -87,7 +87,8 @@ export default defineConfig({
     // 页脚只在没有左侧目录的页面显示（首页、下载页）
     footer: {
       message: '本网站的页面和文字由 AI 通过 Vibe Coding 生成，内容仅供参考，如有不准确之处，以软件实际为准。'
-        + '有任何意见或建议，欢迎<a href="https://github.com/superkeyapp/superkeyapp.github.io/issues" target="_blank" rel="noopener">联系我们</a>。',
+        + '有任何意见或建议，欢迎<a href="https://github.com/superkeyapp/superkeyapp.github.io/issues" target="_blank" rel="noopener">联系我们</a>。'
+        + '<br>超级快捷键参考了市面上的同类软件，但功能可能不如它们完善和稳定。仅供学习和研究使用，请勿用于任何非法用途。',
       copyright: 'Copyright © 2026 超级快捷键',
     },
   },
