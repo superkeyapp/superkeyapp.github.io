@@ -19,6 +19,7 @@ export interface Feature {
   examples: ExamplePart[][]  // 具体例子，一行一个
   status?: FeatureStatus  // 默认开没开、在哪打开：看完这一块就能用，不用再去翻文档
   media: Media
+  doc: string            // 使用教程里这个功能的那一页（下面的“查看详细教程”）
 }
 
 export interface FeatureStatus {
@@ -62,12 +63,13 @@ export const advantages: Advantage[] = [
   // { icon: 'editions', title: '三种版本', text: '功能一样，任选' },
 ]
 
-/** 首屏的界面截图：上面一排标签，点哪个换哪张（图在 docs/public/screens/，16:10） */
+/** 首屏的界面截图：上面一排标签，点哪个换哪张（图在 docs/public/screens/，16:10；用 superkey-media 的 screenshot/shot-home.ps1 重新截） */
 export const screens = [
   { id: 'overview', label: '概览', src: '/screens/overview.webp', alt: '概览：运行状态、常用开关、我的快捷方式' },
   { id: 'hotkey', label: '快捷键', src: '/screens/hotkey.webp', alt: '快捷键列表：每一条一张卡片，可以单独开关' },
   { id: 'edit', label: '编辑', src: '/screens/hotkey-edit.webp', alt: '编辑：录入组合键，按顺序添加几个动作' },
   { id: 'gesture', label: '鼠标手势', src: '/screens/gesture.webp', alt: '鼠标手势：选项和自带的手势' },
+  { id: 'edge', label: '屏幕边缘', src: '/screens/edge.webp', alt: '屏幕边缘：鼠标放到屏幕边上或角落，滚一下就执行' },
 ]
 
 /** 先只发布 WinUI 版：其他版本（Win32、Tauri）的按钮和“选择版本”一块先不显示；以后发布时改成 true */
@@ -91,6 +93,7 @@ export const features: Feature[] = [
   // 例子只写装好就能用的；要自己设的写成“自己设…”
   {
     id: 'hotkey',
+    doc: '/keyboard/hotkey',
     name: '快捷键',
     title: '一个快捷键，打开常用的网站和软件',
     text: '自己设一个组合键，按一下就打开。',
@@ -104,6 +107,7 @@ export const features: Feature[] = [
   },
   {
     id: 'gesture',
+    doc: '/mouse/gesture',
     name: '鼠标手势 · 浏览器和所有软件',
     title: '按住右键，划一下',
     text: '后退、刷新、关标签页，不用找按钮。',
@@ -120,6 +124,7 @@ export const features: Feature[] = [
   },
   {
     id: 'gestureMedia',
+    doc: '/mouse/gesture',
     name: '鼠标手势 · 音乐和视频',
     title: '听歌时，划一下就切歌',
     text: '在播放器里，同样的手势自动换成播放控制。',
@@ -134,6 +139,7 @@ export const features: Feature[] = [
   },
   {
     id: 'mediaGlobal',
+    doc: '/mouse/buttons',
     name: '后台媒体控制',
     title: '不切窗口，控制后台的音乐',
     text: '一边工作一边听歌，在任何软件里都能切歌、调音量。',
@@ -148,6 +154,7 @@ export const features: Feature[] = [
   },
   {
     id: 'edge',
+    doc: '/mouse/edge',
     name: '屏幕边缘',
     title: '鼠标放到屏幕边上，滚一下',
     text: '不用找音量图标，不用开设置。',
@@ -160,6 +167,7 @@ export const features: Feature[] = [
   },
   {
     id: 'copySearch',
+    doc: '/keyboard/copy-search',
     name: '复制搜索',
     title: '复制完，直接搜',
     text: '不用开浏览器、不用粘贴。',
@@ -168,6 +176,7 @@ export const features: Feature[] = [
   },
   {
     id: 'caps',
+    doc: '/keyboard/capslock',
     name: 'CapsLock 增强',
     title: '手不离主键区',
     text: '按住 CapsLock，字母键变成方向、翻页、删除。单按照样切大小写。',
@@ -176,6 +185,7 @@ export const features: Feature[] = [
   },
   {
     id: 'macro',
+    doc: '/keyboard/hotkey',
     name: '多步按键',
     title: '一个快捷键，连着做好几件事',
     text: '按键、打字、打开软件、窗口操作，按顺序执行。',
@@ -187,6 +197,7 @@ export const features: Feature[] = [
   },
   {
     id: 'phrase',
+    doc: '/keyboard/phrase',
     name: '短语替换',
     title: '打几个字母，出来一整段',
     text: '邮箱、地址、常用回复，设一次，到处能用。',

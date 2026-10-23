@@ -58,7 +58,7 @@ const releases = 'https://github.com/superkeyapp/superkey-release/releases'
 
 ## 第一次运行
 
-程序常驻在屏幕右下角的托盘里（闪电图标），左键点它打开主窗口。详见 [安装与开始使用](/guide/start)。
+程序常驻在屏幕右下角的托盘里（闪电图标），左键点它打开主窗口。详见 [安装与开始使用](/start/install)。
 
 ::: info 更多版本
 体积更小的其他版本（最小约 3 MB），敬请期待。

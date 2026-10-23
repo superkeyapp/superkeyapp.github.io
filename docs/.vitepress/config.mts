@@ -4,6 +4,9 @@ import { defineConfig } from 'vitepress'
 // 网站发布在 https://superkeyapp.github.io（组织主页仓库，在根路径，不用设 base）
 const NO_ACTIVE = '^$'   // 永远匹配不上的路径：导航项不高亮
 
+// 顶部导航的“使用教程”在这些页面上高亮（下载页单独一项）
+const DOC_PAGES = '^/(start|keyboard|mouse|manage)/'
+
 export default defineConfig({
   lang: 'zh-CN',
   title: '超级快捷键',
@@ -15,7 +18,8 @@ export default defineConfig({
     logo: '/logo.svg',
 
     // 右上角导航
-    // 顶部导航：先放几个代表性的功能（跳到首页对应的那一节），打开就知道能做什么；后面才是文档、下载
+    // 顶部导航：先放几个代表性的功能（跳到首页对应的那一节），打开就知道能做什么；后面才是使用教程、下载
+    //（叫“使用教程”不叫“文档”：普通用户一看就知道里面有每个功能的用法）
     // 这些都在首页上：不高亮（VitePress 只在换页时判断高亮，页内跳到别的节时不会更新，会一直亮着上次点的那个）
     nav: [
       { text: '快捷键', link: '/#hotkey', activeMatch: NO_ACTIVE },
@@ -32,32 +36,48 @@ export default defineConfig({
           { text: '短语替换', link: '/#phrase', activeMatch: NO_ACTIVE },
         ],
       },
-      { text: '文档', link: '/guide/start', activeMatch: '/guide/' },
+      { text: '使用教程', link: '/start/install', activeMatch: DOC_PAGES },
       { text: '下载', link: '/download' },
       { text: '问题反馈', link: 'https://github.com/superkeyapp/superkey-release/issues' },
     ],
 
-    // 文档页左侧目录
-    sidebar: {
-      '/download': [
-        {
-          text: '开始',
-          items: [
-            { text: '安装与开始使用', link: '/guide/start' },
-            { text: '下载', link: '/download' },
-          ],
-        },
-      ],
-      '/guide/': [
-        {
-          text: '开始',
-          items: [
-            { text: '安装与开始使用', link: '/guide/start' },
-            { text: '下载', link: '/download' },
-          ],
-        },
-      ],
-    },
+    // 文档页左侧目录：和软件左侧的菜单一一对应（软件里每页的“了解详细信息”打开同名的文档，见 superkey-core 的 ui_service.cpp）
+    // 文件夹就是地址：docs/mouse/gesture.md → /mouse/gesture（开始 start、键盘 keyboard、鼠标 mouse、管理 manage）
+    sidebar: [
+      {
+        text: '开始',
+        items: [
+          { text: '安装与开始使用', link: '/start/install' },
+          { text: '下载', link: '/download' },
+          { text: '概览', link: '/start/overview' },
+        ],
+      },
+      {
+        text: '键盘',
+        items: [
+          { text: '短语替换', link: '/keyboard/phrase' },
+          { text: '多步热键', link: '/keyboard/hotkey' },
+          { text: 'CapsLock 增强', link: '/keyboard/capslock' },
+          { text: '复制搜索', link: '/keyboard/copy-search' },
+        ],
+      },
+      {
+        text: '鼠标',
+        items: [
+          { text: '鼠标手势', link: '/mouse/gesture' },
+          { text: '鼠标按键', link: '/mouse/buttons' },
+          { text: '屏幕边缘', link: '/mouse/edge' },
+        ],
+      },
+      {
+        text: '管理',
+        items: [
+          { text: '程序与方案', link: '/manage/apps' },
+          { text: '全部规则', link: '/manage/rules' },
+          { text: '设置', link: '/manage/settings' },
+        ],
+      },
+    ],
 
     // 站内搜索（不依赖外部服务）
     search: {
@@ -79,6 +99,13 @@ export default defineConfig({
     docFooter: { prev: '上一页', next: '下一页' },
     outline: { label: '本页目录' },
     returnToTopLabel: '回到顶部',
+    // 地址不存在时的页面（默认是英文）
+    notFound: {
+      title: '页面不存在',
+      quote: '这个地址可能写错了，或者页面已经搬走。可以回到首页，或者从使用教程里找找。',
+      linkLabel: '回到首页',
+      linkText: '回到首页',
+    },
     sidebarMenuLabel: '目录',
     darkModeSwitchLabel: '外观',
     lightModeSwitchTitle: '切换到浅色',

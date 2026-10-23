@@ -1,16 +1,12 @@
+---
+# 旧地址（1.0.0 版软件里的“使用文档”指向这里）：自动跳到新的地址
+head:
+  - - meta
+    - http-equiv: refresh
+      content: 0; url=/start/install
+search: false
+---
+
 # 安装与开始使用
 
-超级快捷键是一个 Windows 效率工具，支持 64 位 Windows 10（1607 及以上）和 Windows 11。
-
-## 下载
-
-安装包和免安装版会在正式发布后放到这里。
-
-## 第一次运行
-
-1. 运行后，程序常驻在屏幕右下角的托盘里（闪电图标），左键点它打开主窗口。
-2. 在主窗口里打开、关闭各个功能，修改规则；改动会立即保存并生效。
-
-## 遇到问题
-
-欢迎通过 [问题反馈](https://github.com/superkeyapp/superkey-release/issues) 告诉我们。
+这一页已经移到 [安装与开始使用](/start/install)。

@@ -86,6 +86,8 @@ const icons: Record<string, string[]> = {
             <strong>{{ f.status.on ? '装好就能用' : '默认关闭' }}</strong>
             <span>{{ f.status.text }}</span>
           </p>
+          <!-- 首页只讲最常用的几条：末尾留一个不显眼的入口，想看全部规则、怎么改的再点进去 -->
+          <a class="feature-doc" :href="withBase(f.doc)">查看详细教程 →</a>
         </div>
         <div class="feature-media">
           <video v-if="isVideo(f.media)" :src="withBase(f.media.src!)" :poster="f.media.poster && withBase(f.media.poster)"
@@ -378,6 +380,17 @@ const icons: Record<string, string[]> = {
 .btn-alt:hover {
   background: var(--vp-c-default-2);
   color: var(--vp-c-text-1);
+}
+/* 查看详细教程：普通的小字链接，不抢正文 */
+.feature-doc {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+.feature-doc:hover {
+  text-decoration: underline;
 }
 
 /* ---- 功能演示 ---- */
