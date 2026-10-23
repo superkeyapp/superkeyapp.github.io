@@ -13,4 +13,4 @@
 
 ## 遇到问题
 
-欢迎通过 [问题反馈](https://github.com/superkeyapp/superkeyapp.github.io/issues) 告诉我们。
+欢迎通过 [问题反馈](https://github.com/superkeyapp/superkey-release/issues) 告诉我们。

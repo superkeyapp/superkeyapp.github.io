@@ -5,11 +5,19 @@ version: 1.0.0
 
 # 下载
 
-**最新版本：{{ $frontmatter.version }}**（正式版即将发布）
+<script setup>
+// 安装包放在公开仓库 superkeyapp/superkey-release 的 Release 里，文件名带版本号，版本号取自上面的 version
+const releases = 'https://github.com/superkeyapp/superkey-release/releases'
+</script>
 
-::: tip 正式版即将发布
-安装包和免安装版会在正式发布后放在这里。
-:::
+**最新版本：{{ $frontmatter.version }}**
+
+<div class="dl-buttons">
+  <a class="dl-btn dl-primary" :href="`${releases}/download/v${$frontmatter.version}/SuperKey-${$frontmatter.version}-x64-Setup.exe`">下载安装版</a>
+  <a class="dl-btn" :href="`${releases}/download/v${$frontmatter.version}/SuperKey-${$frontmatter.version}-x64-Portable.zip`">下载免安装版</a>
+</div>
+
+下载地址在 GitHub 上，国内有时会比较慢；以前的版本在 [GitHub 的发布页](https://github.com/superkeyapp/superkey-release/releases)。
 
 在软件里点“检查新版本”会打开这一页。软件不会自己联网检查更新，看看下面的最新版本号，比软件里的新就下载安装（见[怎么更新](#怎么更新)）。
 
@@ -44,9 +52,9 @@ version: 1.0.0
 
 ## 更新记录
 
-### 1.0.0（即将发布）
+### 1.0.0（2026-10-23）
 
-- 首个正式版。
+- 第一个版本。
 
 ## 第一次运行
 

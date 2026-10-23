@@ -50,3 +50,37 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 下载页的下载按钮 */
+.dl-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+.dl-buttons .dl-btn {
+  display: inline-block;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--vp-button-alt-border);
+  background: var(--vp-button-alt-bg);
+  color: var(--vp-button-alt-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+.dl-buttons .dl-btn:hover {
+  border-color: var(--vp-button-alt-hover-border);
+  background: var(--vp-button-alt-hover-bg);
+}
+.dl-buttons .dl-primary {
+  border-color: var(--vp-button-brand-border);
+  background: var(--vp-button-brand-bg);
+  color: var(--vp-button-brand-text);
+}
+.dl-buttons .dl-primary:hover {
+  border-color: var(--vp-button-brand-hover-border);
+  background: var(--vp-button-brand-hover-bg);
+  color: var(--vp-button-brand-hover-text);
+}
