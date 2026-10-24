@@ -33,4 +33,4 @@
 
 ## 遇到问题
 
-欢迎通过 [问题反馈](https://github.com/superkeyapp/superkey-release/issues) 告诉我们。
+欢迎通过 [问题反馈](https://a.ixuea.com/c1) 告诉我们。

@@ -1,23 +1,24 @@
 ---
 # 最新版本：发布新版本时改这里（和软件的 VERSION 一致），再在下面的“更新记录”加一条
 version: 1.0.0
+# 两个下载按钮的短链接（a.ixuea.com，统计点击次数）：发新版本时，在 https://a.ixuea.com/uris/new 新建两个短链接，
+# Source 填新版本安装包、免安装版的下载地址（superkeyapp/superkey-release 的 Release 里，文件名带版本号），
+# Media 填“官网”、Unit 填“下载页”、Key 填按钮名和版本号；把返回的代码拼在 https://a.ixuea.com/ 后面填到这里
+setupLink: https://a.ixuea.com/c2
+portableLink: https://a.ixuea.com/cm
 ---
 
 # 下载
 
-<script setup>
-// 安装包放在公开仓库 superkeyapp/superkey-release 的 Release 里，文件名带版本号，版本号取自上面的 version
-const releases = 'https://github.com/superkeyapp/superkey-release/releases'
-</script>
-
 **最新版本：{{ $frontmatter.version }}**
 
 <div class="dl-buttons">
-  <a class="dl-btn dl-primary" :href="`${releases}/download/v${$frontmatter.version}/SuperKey-${$frontmatter.version}-x64-Setup.exe`">下载安装版</a>
-  <a class="dl-btn" :href="`${releases}/download/v${$frontmatter.version}/SuperKey-${$frontmatter.version}-x64-Portable.zip`">下载免安装版</a>
+  <!-- 新标签页打开：短链接先打开一个跳转页再开始下载，这样下载页还留着 -->
+  <a class="dl-btn dl-primary" :href="$frontmatter.setupLink" target="_blank" rel="noopener">下载安装版</a>
+  <a class="dl-btn" :href="$frontmatter.portableLink" target="_blank" rel="noopener">下载免安装版</a>
 </div>
 
-下载地址在 GitHub 上，国内有时会比较慢；以前的版本在 [GitHub 的发布页](https://github.com/superkeyapp/superkey-release/releases)。
+下载地址在 GitHub 上，国内有时会比较慢；以前的版本在 [GitHub 的发布页](https://a.ixuea.com/ce)。
 
 在软件里点“检查新版本”会打开这一页。软件不会自己联网检查更新，看看下面的最新版本号，比软件里的新就下载安装（见[怎么更新](#怎么更新)）。
 

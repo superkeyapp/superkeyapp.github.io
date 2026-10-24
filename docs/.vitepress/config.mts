@@ -38,7 +38,7 @@ export default defineConfig({
       },
       { text: '使用教程', link: '/start/install', activeMatch: DOC_PAGES },
       { text: '下载', link: '/download' },
-      { text: '问题反馈', link: 'https://github.com/superkeyapp/superkey-release/issues' },
+      { text: '问题反馈', link: 'https://a.ixuea.com/cn' },   // 站外链接都用短链接（a.ixuea.com），统计点击次数
     ],
 
     // 文档页左侧目录：和软件左侧的菜单一一对应（软件里每页的“了解详细信息”打开同名的文档，见 superkey-core 的 ui_service.cpp）
@@ -114,7 +114,7 @@ export default defineConfig({
     // 页脚只在没有左侧目录的页面显示（首页、下载页）
     footer: {
       message: '本网站的页面和文字由 AI 通过 Vibe Coding 生成，内容仅供参考，如有不准确之处，以软件实际为准。'
-        + '有任何意见或建议，欢迎<a href="https://github.com/superkeyapp/superkey-release/issues" target="_blank" rel="noopener">联系我们</a>。'
+        + '有任何意见或建议，欢迎<a href="https://a.ixuea.com/ck" target="_blank" rel="noopener">联系我们</a>。'
         + '<br>超级快捷键参考了市面上的同类软件，但功能可能不如它们完善和稳定。仅供学习和研究使用，请勿用于任何非法用途。'
         + '<br>本网站使用百度统计了解访问情况（打开了哪些页面、点了哪些按钮），不收集个人信息；软件本身不联网。',
       copyright: 'Copyright © 2026 超级快捷键',
