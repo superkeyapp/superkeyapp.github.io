@@ -1,24 +1,62 @@
 ---
 # 最新版本：发布新版本时改这里（和软件的 VERSION 一致），再在下面的“更新记录”加一条
 version: 1.0.0
-# 两个下载按钮的短链接（a.ixuea.com，统计点击次数）：发新版本时，在 https://a.ixuea.com/uris/new 新建两个短链接，
-# Source 填新版本安装包、免安装版的下载地址（superkeyapp/superkey-release 的 Release 里，文件名带版本号），
-# Media 填“官网”、Unit 填“下载页”、Key 填按钮名和版本号；把返回的代码拼在 https://a.ixuea.com/ 后面填到这里
-setupLink: https://a.ixuea.com/c2
-portableLink: https://a.ixuea.com/cm
+# 下载地址分国内、海外两组（国内用户点 GitHub 常常很慢），每个按钮上写明来源。都填短链接（a.ixuea.com，统计点击次数）：
+# 发新版本时，在 https://a.ixuea.com/uris/new 给每个地址新建一个短链接，Source 填新版本的下载地址（文件名带版本号），
+# Media 填“官网”、Unit 填“下载页”、Key 填来源、按钮名和版本号；把返回的代码拼在 https://a.ixuea.com/ 后面填到这里。
+# 空着的不显示；网盘一个都没填时显示“即将提供”
+# 国内只放网盘，不放自己服务器的直链（服务器带宽小，直接下载很慢）
+cn:
+  # 网盘：每个一个按钮，按钮上写网盘名，后面一句说明要不要登录、要不要会员，用户按自己的情况选；
+  # 分享的文件夹里放安装版、免安装版两个文件。按推荐顺序排（免费账号就快的在前）。
+  # 要加别的网盘，照样加一项。百度网盘的分享地址带上提取码（?pwd=…），打开时自动填好，页面上不用写
+  pans:
+    - name: 123 网盘
+      note: 免费账号登录就能下载，速度快
+      url: https://a.ixuea.com/Rl   # 123 网盘的分享
+    - name: 百度网盘
+      note: 不开会员会限速，有会员的选这个
+      url: https://a.ixuea.com/Rj   # 百度网盘的分享
+github:
+  setupLink: https://a.ixuea.com/c2      # superkey-release 1.0.0 的安装包
+  portableLink: https://a.ixuea.com/cm   # superkey-release 1.0.0 的免安装版
 ---
 
 # 下载
 
 **最新版本：{{ $frontmatter.version }}**
 
-<div class="dl-buttons">
-  <!-- 新标签页打开：短链接先打开一个跳转页再开始下载，这样下载页还留着 -->
-  <a class="dl-btn dl-primary" :href="$frontmatter.setupLink" target="_blank" rel="noopener">下载安装版</a>
-  <a class="dl-btn" :href="$frontmatter.portableLink" target="_blank" rel="noopener">下载免安装版</a>
+<!-- 两组下载地址并排（手机上上下排），每个按钮写明来源；按钮在新标签页打开：短链接先打开一个跳转页再开始下载，这样下载页还留着 -->
+<div class="dl-sources">
+  <div class="dl-source">
+    <div class="dl-source-title">国内下载</div>
+    <div class="dl-source-desc">中国大陆用户选这里，速度快</div>
+    <div v-if="$frontmatter.cn.pans.some(p => p.url)" class="dl-row">
+      <div class="dl-row-label">网盘（安装版、免安装版都在里面）</div>
+      <template v-for="p in $frontmatter.cn.pans" :key="p.name">
+        <div v-if="p.url" class="dl-pan">
+          <a class="dl-btn" :href="p.url" target="_blank" rel="noopener">{{ p.name }}</a>
+          <span class="dl-pan-note">{{ p.note }}</span>
+        </div>
+      </template>
+    </div>
+    <div v-else class="dl-buttons">
+      <span class="dl-btn dl-disabled">即将提供</span>
+    </div>
+  </div>
+  <div class="dl-source">
+    <div class="dl-source-title">海外下载</div>
+    <div class="dl-source-desc">海外用户选这里；国内访问可能较慢</div>
+    <div class="dl-row">
+      <div class="dl-row-label">GitHub</div>
+      <div class="dl-buttons">
+        <a class="dl-btn dl-primary" :href="$frontmatter.github.setupLink" target="_blank" rel="noopener">安装版</a>
+        <a class="dl-btn" :href="$frontmatter.github.portableLink" target="_blank" rel="noopener">免安装版</a>
+      </div>
+      <div class="dl-source-more">以前的版本：<a href="https://a.ixuea.com/ce" target="_blank" rel="noopener">GitHub 发布页</a></div>
+    </div>
+  </div>
 </div>
-
-下载地址在 GitHub 上，国内有时会比较慢；以前的版本在 [GitHub 的发布页](https://a.ixuea.com/ce)。
 
 在软件里点“检查新版本”会打开这一页。软件不会自己联网检查更新，看看下面的最新版本号，比软件里的新就下载安装（见[怎么更新](#怎么更新)）。
 

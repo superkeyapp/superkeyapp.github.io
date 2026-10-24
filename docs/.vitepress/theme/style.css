@@ -52,6 +52,75 @@
 }
 
 /* 下载页的下载按钮 */
+/* 下载页：国内、海外两组下载地址并排，窄屏上下排 */
+.dl-sources {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+.dl-source {
+  padding: 20px 24px 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+}
+.dl-source-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.dl-source-desc,
+.dl-source-more {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.dl-source .dl-buttons {
+  gap: 8px;
+  margin: 6px 0;
+}
+.dl-row {
+  margin-top: 14px;
+}
+.dl-row-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+/* 网盘：按钮 + 一句说明（要不要登录、要不要会员），窄了说明换到下一行 */
+.dl-pan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 8px 0;
+}
+.dl-pan .dl-btn {
+  display: inline-block;
+  padding: 0 16px;
+  line-height: 36px;
+  border-radius: 18px;
+  border: 1px solid var(--vp-button-alt-border);
+  background: var(--vp-button-alt-bg);
+  color: var(--vp-button-alt-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+.dl-pan .dl-btn:hover {
+  border-color: var(--vp-button-alt-hover-border);
+  background: var(--vp-button-alt-hover-bg);
+}
+.dl-pan-note {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.dl-source .dl-buttons .dl-btn {
+  padding: 0 16px;
+}
+.dl-buttons .dl-btn.dl-disabled {
+  color: var(--vp-c-text-3);
+  cursor: default;
+}
+
 .dl-buttons {
   display: flex;
   flex-wrap: wrap;
