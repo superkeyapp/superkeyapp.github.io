@@ -13,10 +13,10 @@ cn:
   pans:
     - name: 123 网盘
       note: 免费账号登录就能下载，速度快
-      url: https://a.ixuea.com/Rl   # 123 网盘的分享
+      url: https://a.ixuea.com/Rx   # 123 网盘的分享（超级快捷键和经典版在同一个分享里）
     - name: 百度网盘
       note: 不开会员会限速，有会员的选这个
-      url: https://a.ixuea.com/Rj   # 百度网盘的分享
+      url: https://a.ixuea.com/RS   # 百度网盘的分享（超级快捷键和经典版在同一个分享里）
 github:
   setupLink: https://a.ixuea.com/c2      # superkey-release 1.0.0 的安装包
   portableLink: https://a.ixuea.com/cm   # superkey-release 1.0.0 的免安装版
