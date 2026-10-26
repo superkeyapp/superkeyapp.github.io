@@ -13,7 +13,7 @@ cn:
   pans:
     - name: 123 网盘
       note: 免费账号登录就能下载，速度快
-      url: https://a.ixuea.com/Rx   # 123 网盘的分享（超级快捷键和经典版在同一个分享里）
+      url: https://a.ixuea.com/RL   # 123 网盘的分享（超级快捷键）
     - name: 百度网盘
       note: 不开会员会限速，有会员的选这个
       url: https://a.ixuea.com/RS   # 百度网盘的分享（超级快捷键和经典版在同一个分享里）
