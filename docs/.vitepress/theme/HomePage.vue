@@ -275,8 +275,12 @@ const icons: Record<string, string[]> = {
   max-width: 960px;
   margin: 48px auto 0;
 }
+/* 手机上放不下一排：不换行，左右滑动（不显示滚动条） */
 .screen-tabs {
   display: inline-flex;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
   gap: 4px;
   padding: 4px;
   margin-bottom: 16px;
@@ -284,6 +288,8 @@ const icons: Record<string, string[]> = {
   background: var(--vp-c-default-soft);
 }
 .screen-tabs button {
+  flex: none;
+  white-space: nowrap;
   padding: 0 16px;
   line-height: 32px;
   border-radius: 16px;
@@ -672,13 +678,15 @@ kbd {
   .hero {
     padding: 24px 0 32px;
   }
+  /* minmax(0, 1fr)：两块始终等宽，不会被字撑宽 */
   .advantages {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     margin-bottom: 32px;
   }
   /* 手机上一块只有一百多像素宽：图标、边距收小，小字才能一行放下 */
   .advantages li {
+    min-width: 0;
     gap: 8px;
     padding: 10px 10px;
   }
@@ -716,6 +724,23 @@ kbd {
   }
   .feature-text h2 {
     font-size: 24px;
+  }
+}
+/* 很窄的手机（宽不到 360）：优势卡片的字和边距再收小，小字还能一行放下 */
+@media (max-width: 359px) {
+  .advantages li {
+    gap: 6px;
+    padding: 10px 8px;
+  }
+  .advantages svg {
+    width: 18px;
+    height: 18px;
+  }
+  .advantages strong {
+    font-size: 15px;
+  }
+  .advantages span {
+    font-size: 11px;
   }
 }
 </style>

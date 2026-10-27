@@ -12,7 +12,16 @@ export default defineConfig({
   title: '超级快捷键',
   description: 'Windows 效率工具：短语替换、多步热键、屏幕边缘、复制搜索、CapsLock 增强、鼠标手势',
   cleanUrls: true,
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    // 安卓微信会按微信里的“字体大小”设置放大网页文字，排版会被撑乱：让微信按标准字号显示（用户改设置后也恢复）
+    ['script', {}, `(function () {
+  function keep() { WeixinJSBridge.invoke('setFontSizeCallback', { fontSize: 0 }) }
+  function init() { keep(); WeixinJSBridge.on('menu:setfont', keep) }
+  if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') init()
+  else document.addEventListener('WeixinJSBridgeReady', init, false)
+})()`],
+  ],
 
   themeConfig: {
     logo: '/logo.svg',
